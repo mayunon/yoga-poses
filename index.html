@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ヨガポーズ帖 / Yoga Pose Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Zen Kaku Gothic New',sans-serif;background:#faf9f7;color:#2c2c2a;min-height:100vh;}
+body.en{font-family:'Jost',sans-serif;}
+.app{max-width:700px;margin:0 auto;padding:2rem 1.2rem;}
+.app-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem;}
+.header-left h1{font-family:'Noto Serif JP',serif;font-weight:300;font-size:24px;color:#2c2c2a;letter-spacing:.08em;}
+body.en .header-left h1{font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:.04em;}
+.app-sub{font-size:11px;color:#888780;margin-top:3px;}
+.lang-btn{font-size:12px;padding:5px 12px;border:1px solid #d3d1c7;border-radius:20px;background:transparent;cursor:pointer;color:#888780;font-family:inherit;transition:all .15s;}
+.lang-btn:hover{background:#f1efe8;color:#2c2c2a;}
+.tab-bar{display:flex;border-bottom:1px solid #e0ddd6;margin-bottom:1.4rem;}
+.tab{font-family:inherit;font-size:13px;padding:9px 18px;border:none;background:none;color:#888780;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
+.tab.active{color:#2c2c2a;border-bottom:2px solid #2c2c2a;font-weight:500;}
+.page{display:none;}.page.active{display:block;}
+.search-bar{width:100%;padding:10px 14px;border:1px solid #d3d1c7;border-radius:8px;font-family:inherit;font-size:13px;background:#fff;color:#2c2c2a;margin-bottom:.9rem;outline:none;}
+.search-bar:focus{border-color:#888780;}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.1rem;}
+.fb{font-family:inherit;font-size:11px;padding:4px 12px;border:1px solid #d3d1c7;border-radius:20px;background:transparent;color:#888780;cursor:pointer;transition:all .15s;}
+.fb.active,.fb:hover{background:#f1efe8;color:#2c2c2a;border-color:#888780;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:11px;}
+.card{background:#fff;border:1px solid #e0ddd6;border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .15s,transform .1s;position:relative;}
+.card:hover{border-color:#b4b2a9;transform:translateY(-1px);}
+.card-body{padding:12px 13px;}
+.card-name{font-size:12px;font-weight:500;color:#2c2c2a;margin-bottom:2px;}
+.card-en{font-size:10px;color:#888780;margin-bottom:5px;}
+.tags{display:flex;gap:3px;flex-wrap:wrap;}
+.tag{font-size:10px;padding:2px 6px;border-radius:10px;}
+.tl{background:#EAF3DE;color:#3B6D11;}.tc{background:#E1F5EE;color:#0F6E56;}
+.user-badge{position:absolute;top:7px;right:7px;font-size:9px;padding:2px 6px;border-radius:8px;background:#faeeda;color:#854F0B;}
+.add-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:10px;border:1px dashed #d3d1c7;border-radius:12px;background:transparent;cursor:pointer;font-family:inherit;font-size:13px;color:#888780;margin-top:12px;transition:all .15s;}
+.add-btn:hover{background:#f1efe8;color:#2c2c2a;border-color:#888780;}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:1rem;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:14px;border:1px solid #d3d1c7;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;}
+.modal-body{padding:1.4rem;}
+.modal-name{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:400;color:#2c2c2a;margin-bottom:3px;}
+body.en .modal-name{font-family:'Cormorant Garamond',serif;font-size:22px;}
+.modal-en{font-size:12px;color:#888780;margin-bottom:10px;}
+.modal-tags{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;}
+.msec{font-size:11px;color:#888780;margin-top:12px;margin-bottom:4px;}
+.mdesc{font-size:13px;line-height:1.75;color:#2c2c2a;}
+.modal-actions{display:flex;gap:8px;margin-top:1.2rem;}
+.modal-edit-btn{flex:1;font-family:inherit;font-size:12px;padding:7px;border:1px solid #d3d1c7;border-radius:8px;background:transparent;cursor:pointer;color:#2c2c2a;transition:background .15s;}
+.modal-edit-btn:hover{background:#f1efe8;}
+.modal-del-btn{font-family:inherit;font-size:12px;padding:7px 14px;border:1px solid #f7c1c1;border-radius:8px;background:transparent;cursor:pointer;color:#a32d2d;transition:background .15s;}
+.modal-del-btn:hover{background:#fcebeb;}
+.close-btn{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#888780;}
+.close-btn:hover{color:#2c2c2a;}
+.edit-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:center;justify-content:center;padding:1rem;}
+.edit-modal-bg.open{display:flex;}
+.edit-modal{background:#fff;border-radius:14px;border:1px solid #d3d1c7;width:100%;max-width:440px;max-height:92vh;overflow-y:auto;padding:1.4rem;}
+.edit-modal h2{font-family:'Noto Serif JP',serif;font-weight:400;font-size:17px;margin-bottom:1.2rem;color:#2c2c2a;}
+body.en .edit-modal h2{font-family:'Cormorant Garamond',serif;font-size:19px;}
+.field{margin-bottom:.9rem;}
+.field label{display:block;font-size:11px;color:#888780;margin-bottom:4px;}
+.field input,.field textarea,.field select{width:100%;padding:8px 11px;border:1px solid #d3d1c7;border-radius:8px;font-family:inherit;font-size:13px;background:#fff;color:#2c2c2a;outline:none;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#888780;}
+.field textarea{resize:vertical;min-height:70px;line-height:1.6;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.save-btn{width:100%;font-family:inherit;font-size:13px;padding:10px;border:1px solid #2c2c2a;border-radius:8px;background:#2c2c2a;color:#fff;cursor:pointer;margin-top:.4rem;}
+.save-btn:hover{background:#444441;}
+.cancel-edit-btn{width:100%;font-family:inherit;font-size:13px;padding:9px;border:1px solid #d3d1c7;border-radius:8px;background:transparent;cursor:pointer;color:#888780;margin-top:6px;}
+.cancel-edit-btn:hover{background:#f1efe8;}
+.routine-cards{display:flex;flex-direction:column;gap:10px;}
+.rcard{background:#fff;border:1px solid #e0ddd6;border-radius:12px;padding:1.1rem 1.2rem;cursor:pointer;transition:border-color .15s;}
+.rcard:hover{border-color:#b4b2a9;}
+.rcard-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.rcard-title{font-size:14px;font-weight:500;color:#2c2c2a;}
+.rcard-meta{font-size:11px;color:#888780;}
+.rcard-desc{font-size:12px;color:#888780;margin-bottom:9px;line-height:1.6;}
+.rcard-poses{display:flex;gap:4px;flex-wrap:wrap;}
+.rpill{font-size:11px;padding:3px 8px;border-radius:10px;background:#f1efe8;color:#5f5e5a;}
+.routine-detail{display:none;}
+.routine-detail.open{display:block;}
+.back-btn{font-family:inherit;font-size:12px;background:none;border:none;cursor:pointer;color:#888780;padding:0 0 1rem;display:flex;align-items:center;gap:4px;}
+.back-btn:hover{color:#2c2c2a;}
+.rdetail-title{font-family:'Noto Serif JP',serif;font-size:19px;font-weight:400;margin-bottom:4px;color:#2c2c2a;}
+body.en .rdetail-title{font-family:'Cormorant Garamond',serif;font-size:21px;}
+.rdetail-meta{font-size:12px;color:#888780;margin-bottom:1.2rem;}
+.step-list{display:flex;flex-direction:column;gap:8px;}
+.step{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e0ddd6;border-radius:8px;padding:9px 11px;}
+.step-num{width:22px;height:22px;border-radius:50%;background:#f1efe8;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;color:#888780;flex-shrink:0;}
+.step-info{flex:1;}
+.step-name{font-size:13px;font-weight:500;color:#2c2c2a;}
+.step-dur{font-size:11px;color:#888780;margin-top:2px;}
+.timer-btn{font-family:inherit;font-size:13px;padding:8px 20px;border:1px solid #d3d1c7;border-radius:8px;background:transparent;cursor:pointer;color:#2c2c2a;margin-top:1.2rem;}
+.timer-btn:hover{background:#f1efe8;}
+.timer-box{margin-top:.8rem;background:#f1efe8;border-radius:10px;padding:1.1rem 1.2rem;text-align:center;}
+.timer-step-label{font-size:11px;color:#888780;margin-bottom:4px;letter-spacing:.04em;}
+.timer-pose-name{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:400;color:#2c2c2a;margin-bottom:6px;}
+body.en .timer-pose-name{font-family:'Cormorant Garamond',serif;font-size:22px;}
+.timer-time{font-family:'Noto Serif JP',serif;font-size:40px;color:#2c2c2a;letter-spacing:.05em;line-height:1;}
+.timer-progress-wrap{width:100%;background:#e0ddd6;border-radius:4px;height:4px;margin:10px 0 8px;overflow:hidden;}
+.timer-progress-bar{height:4px;background:#2c2c2a;border-radius:4px;transition:width .9s linear;}
+.timer-next{font-size:12px;color:#888780;min-height:18px;margin-bottom:4px;}
+.timer-controls{display:flex;gap:8px;justify-content:center;margin-top:10px;}
+.tc-btn{font-family:inherit;font-size:12px;padding:6px 16px;border:1px solid #d3d1c7;border-radius:8px;background:#fff;cursor:pointer;color:#2c2c2a;}
+.tc-btn:hover{background:#e0ddd6;}
+.tc-btn.tc-start{background:#2c2c2a;color:#faf9f7;border-color:#2c2c2a;padding:6px 22px;}
+.tc-btn.tc-start:hover{background:#444441;}
+.timer-audio-row{display:flex;gap:8px;justify-content:center;margin-top:10px;}
+.audio-toggle-btn{font-family:inherit;font-size:11px;padding:5px 12px;border:1px solid #d3d1c7;border-radius:20px;background:#fff;cursor:pointer;color:#888780;transition:all .15s;}
+.audio-toggle-btn.on{background:#2c2c2a;color:#fff;border-color:#2c2c2a;}
+@media(max-width:480px){.app{padding:1.2rem .8rem;}.grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}.field-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="app-header">
+    <div class="header-left">
+      <h1 id="app-title">ヨガポーズ帖</h1>
+      <p class="app-sub" id="app-sub">yoga pose dictionary &amp; routine</p>
+    </div>
+    <button class="lang-btn" onclick="toggleLang()" id="lang-btn">EN</button>
+  </div>
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('poses')" id="tab-poses">ポーズ図鑑</button>
+    <button class="tab" onclick="switchTab('routine')" id="tab-routine">ルーティン</button>
+  </div>
+  <div class="page active" id="page-poses">
+    <input class="search-bar" id="search" oninput="renderPoses()" placeholder="ポーズ名で検索...">
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+    <button class="add-btn" onclick="openE(null)" id="add-pose-btn">＋ ポーズを追加</button>
+  </div>
+  <div class="page" id="page-routine">
+    <div id="routine-list"><div class="routine-cards" id="rcards"></div></div>
+    <div class="routine-detail" id="routine-detail">
+      <button class="back-btn" onclick="closeRoutine()" id="back-btn">← ルーティン一覧へ</button>
+      <p class="rdetail-title" id="rd-title"></p>
+      <p class="rdetail-meta" id="rd-meta"></p>
+      <div class="step-list" id="step-list"></div>
+      <div class="timer-box" id="timer-box">
+        <p class="timer-step-label" id="timer-label">現在のポーズ</p>
+        <p class="timer-pose-name" id="timer-pose">—</p>
+        <p class="timer-time" id="timer-time">0:00</p>
+        <div class="timer-progress-wrap"><div class="timer-progress-bar" id="timer-progress" style="width:0%"></div></div>
+        <p class="timer-next" id="timer-next"></p>
+        <div class="timer-controls">
+          <button class="tc-btn" onclick="prevPose()" id="btn-prev">← 前へ</button>
+          <button class="tc-btn tc-start" onclick="toggleStart()" id="start-btn">▷ 開始</button>
+          <button class="tc-btn" onclick="nextPose()" id="btn-next">次へ →</button>
+        </div>
+        <div class="timer-audio-row">
+          <button class="audio-toggle-btn" onclick="toggleBgm()" id="bgm-btn">BGM オン</button>
+          <select id="bgm-type" onchange="changeBgmType()" style="font-family:inherit;font-size:11px;padding:4px 8px;border:1px solid #d3d1c7;border-radius:8px;background:#fff;color:#2c2c2a;cursor:pointer;">
+            <option value="bowl">シンギングボール</option>
+            <option value="musicbox">オルゴール</option>
+            <option value="wave">波の音</option>
+            <option value="mantra">マントラ（オーム）</option>
+          </select>
+          <input type="range" min="0" max="100" value="40" id="bgm-vol" oninput="setBgmVol(this.value)" style="width:60px;">
+        </div>
+        <div class="timer-audio-row" style="margin-top:6px;">
+          <button class="audio-toggle-btn" onclick="toggleVoice()" id="voice-btn">声 オン</button>
+          <input type="range" min="0" max="100" value="92" id="voice-vol" oninput="setVoiceVol(this.value)" style="width:60px;">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-bg" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-body">
+      <button class="close-btn" onclick="document.getElementById('modal').classList.remove('open')">×</button>
+      <p class="modal-name" id="modal-name"></p>
+      <p class="modal-en" id="modal-en"></p>
+      <div class="modal-tags" id="modal-tags"></div>
+      <p class="msec" id="msec-effect">効果・説明</p>
+      <p class="mdesc" id="modal-desc"></p>
+      <p class="msec" id="msec-parts">対象部位</p>
+      <p class="mdesc" id="modal-parts"></p>
+      <div class="modal-actions" id="modal-actions"></div>
+    </div>
+  </div>
+</div>
+<div class="edit-modal-bg" id="edit-modal" onclick="closeEditModal(event)">
+  <div class="edit-modal">
+    <h2 id="edit-title">ポーズを追加</h2>
+    <div class="field"><label id="lbl-name">ポーズ名（日本語）</label><input type="text" id="f-name" placeholder="例：山のポーズ"></div>
+    <div class="field"><label id="lbl-en">ポーズ名（英語）</label><input type="text" id="f-en" placeholder="例：Tadasana"></div>
+    <div class="field-row">
+      <div class="field"><label id="lbl-cat">カテゴリ</label><select id="f-cat"><option>立位</option><option>前屈</option><option>後屈</option><option>座位</option><option>四つ這い</option><option>仰向け</option><option>その他</option></select></div>
+      <div class="field"><label id="lbl-level">レベル</label><select id="f-level"><option>初級</option><option>中級</option><option>上級</option></select></div>
+    </div>
+    <div class="field"><label id="lbl-parts">対象部位</label><input type="text" id="f-parts" placeholder="例：体幹・脚・姿勢"></div>
+    <div class="field"><label id="lbl-desc">説明・効果</label><textarea id="f-desc" placeholder="このポーズの効果や特徴を書いてください"></textarea></div>
+    <button class="save-btn" onclick="savePose()" id="save-btn">保存する</button>
+    <button class="cancel-edit-btn" onclick="document.getElementById('edit-modal').classList.remove('open')" id="cancel-btn">キャンセル</button>
+  </div>
+</div>
+<script>
+const DP=[
+  {id:1,name:"山のポーズ",en:"Tadasana",cat:"立位",level:"初級",parts:"体幹・脚・姿勢",desc:"すべてのポーズの基本。足裏全体で大地を感じ、体の軸を整える。姿勢意識と集中力の向上に。",img:"",user:false},
+  {id:2,name:"木のポーズ",en:"Vrksasana",cat:"立位",level:"初級",parts:"体幹・バランス・足首",desc:"片足で立ち、もう一方の足を内腿に置くバランスポーズ。集中力・体幹・足首の強化に。",img:"",user:false},
+  {id:3,name:"戦士のポーズ I",en:"Virabhadrasana I",cat:"立位",level:"初級",parts:"脚・体幹・肩",desc:"前足を曲げ、両腕を頭上に伸ばす力強いポーズ。下半身の強化と胸・肩のストレッチ。",img:"",user:false},
+  {id:4,name:"戦士のポーズ II",en:"Virabhadrasana II",cat:"立位",level:"初級",parts:"脚・体幹・腕",desc:"両腕を左右に広げ、前膝を曲げた安定したポーズ。脚の強化・股関節のストレッチ・集中力向上。",img:"",user:false},
+  {id:5,name:"三角のポーズ",en:"Trikonasana",cat:"立位",level:"初級",parts:"脚・体側・腰",desc:"脚を広げ体を横に倒す体側ストレッチ。ハムストリング・股関節・体幹の柔軟性向上。",img:"",user:false},
+  {id:6,name:"子どものポーズ",en:"Balasana",cat:"前屈",level:"初級",parts:"背中・腰・肩",desc:"膝を折り、おでこを床につけて休む基本のリストアポーズ。腰の緊張をほぐし、心を落ち着ける。",img:"",user:false},
+  {id:7,name:"猫のポーズ",en:"Marjaryasana",cat:"四つ這い",level:"初級",parts:"脊椎・腹部・首",desc:"四つ這いから背中を丸める動き。呼吸に合わせて行うことで脊椎の柔軟性向上と腰痛緩和に。",img:"",user:false},
+  {id:8,name:"下向き犬のポーズ",en:"Adho Mukha Svanasana",cat:"前屈",level:"初級",parts:"肩・ハムストリング・ふくらはぎ",desc:"逆V字形の代表ポーズ。全身のストレッチと体力強化。ポーズの合間の休息にも使われる。",img:"",user:false},
+  {id:9,name:"橋のポーズ",en:"Setu Bandhasana",cat:"後屈",level:"初級",parts:"背中・臀部・体幹",desc:"仰向けから腰を持ち上げるポーズ。背面の強化と胸・腰のストレッチ。肩こり・疲労回復にも。",img:"",user:false},
+  {id:10,name:"コブラのポーズ",en:"Bhujangasana",cat:"後屈",level:"初級",parts:"背中・腹部・胸",desc:"うつ伏せから上半身を持ち上げる後屈ポーズ。背筋強化・猫背改善・腹部のストレッチ。",img:"",user:false},
+  {id:11,name:"屍のポーズ",en:"Savasana",cat:"仰向け",level:"初級",parts:"全身・神経系",desc:"仰向けに寝て完全に脱力するポーズ。練習の終わりに行い、体と心を深い休息に導く。",img:"",user:false},
+  {id:12,name:"蓮のポーズ",en:"Padmasana",cat:"座位",level:"中級",parts:"股関節・膝・足首",desc:"両足を太腿の上に置く瞑想ポーズ。精神の安定と集中力向上。高い股関節の柔軟性が必要。",img:"",user:false},
+  {id:13,name:"舟のポーズ",en:"Navasana",cat:"座位",level:"中級",parts:"腹部・体幹・股関節",desc:"お尻でバランスをとりV字型に体を保つポーズ。腹筋・腸腰筋・脊椎起立筋の強化に効果的。",img:"",user:false},
+  {id:14,name:"弓のポーズ",en:"Dhanurasana",cat:"後屈",level:"中級",parts:"背中・腹部・股関節",desc:"うつ伏せで両足首を掴み体を弓型に反らすポーズ。背面の強化と胸・腹・股関節の大きなストレッチ。",img:"",user:false},
+];
+const RT=[
+  {id:1,title:{ja:"朝の目覚めルーティン",en:"Morning Wake-Up"},dur:{ja:"10分",en:"10 min"},lv:{ja:"初級",en:"Beginner"},desc:{ja:"起き抜けの体をゆっくり目覚めさせる穏やかなフロー。",en:"A gentle flow to slowly awaken your body after sleep."},steps:[{pid:6,d:{ja:"1分30秒",en:"1m 30s"}},{pid:7,d:{ja:"1分",en:"1 min"}},{pid:10,d:{ja:"1分",en:"1 min"}},{pid:8,d:{ja:"1分",en:"1 min"}},{pid:1,d:{ja:"30秒",en:"30 sec"}},{pid:2,d:{ja:"1分（左右）",en:"1 min each"}},{pid:11,d:{ja:"2分",en:"2 min"}}]},
+  {id:2,title:{ja:"体幹強化ルーティン",en:"Core Strength"},dur:{ja:"15分",en:"15 min"},lv:{ja:"初級〜中級",en:"Beginner–Int."},desc:{ja:"インナーマッスルを鍛え、安定した体の軸を作る。",en:"Strengthen your inner muscles and build a stable core."},steps:[{pid:1,d:{ja:"1分",en:"1 min"}},{pid:3,d:{ja:"2分（左右）",en:"2 min each"}},{pid:4,d:{ja:"2分（左右）",en:"2 min each"}},{pid:13,d:{ja:"1分",en:"1 min"}},{pid:9,d:{ja:"1分30秒",en:"1m 30s"}},{pid:8,d:{ja:"1分",en:"1 min"}},{pid:11,d:{ja:"2分",en:"2 min"}}]},
+  {id:3,title:{ja:"リラックス夜ルーティン",en:"Evening Unwind"},dur:{ja:"12分",en:"12 min"},lv:{ja:"初級",en:"Beginner"},desc:{ja:"一日の緊張をほぐし、深い眠りへと誘う夜のフロー。",en:"Release the day's tension and prepare for deep sleep."},steps:[{pid:7,d:{ja:"2分",en:"2 min"}},{pid:6,d:{ja:"2分",en:"2 min"}},{pid:9,d:{ja:"2分",en:"2 min"}},{pid:5,d:{ja:"1分（左右）",en:"1 min each"}},{pid:11,d:{ja:"3分",en:"3 min"}}]},
+  {id:4,title:{ja:"全身ストレッチルーティン",en:"Full Body Stretch"},dur:{ja:"20分",en:"20 min"},lv:{ja:"初級〜中級",en:"Beginner–Int."},desc:{ja:"全身の主要な筋肉・関節をくまなくストレッチ。",en:"Stretch all major muscles and joints from head to toe."},steps:[{pid:1,d:{ja:"1分",en:"1 min"}},{pid:8,d:{ja:"1分",en:"1 min"}},{pid:3,d:{ja:"2分（左右）",en:"2 min each"}},{pid:5,d:{ja:"2分（左右）",en:"2 min each"}},{pid:10,d:{ja:"1分",en:"1 min"}},{pid:14,d:{ja:"1分",en:"1 min"}},{pid:6,d:{ja:"2分",en:"2 min"}},{pid:12,d:{ja:"2分",en:"2 min"}},{pid:11,d:{ja:"3分",en:"3 min"}}]},
+];
+const CM={ja:["すべて","立位","前屈","後屈","座位","四つ這い","仰向け","その他"],en:["All","Standing","Forward","Backbend","Seated","All-fours","Supine","Other"]};
+const T={
+  ja:{aT:"ヨガポーズ帖",aS:"yoga pose dictionary & routine",tP:"ポーズ図鑑",tR:"ルーティン",sp:"ポーズ名で検索...",ub:"マイポーズ",ab:"＋ ポーズを追加",me:"効果・説明",mp:"対象部位",ep:"編集",dp:"削除",et:"ポーズを編集",at:"ポーズを追加",ln:"ポーズ名（日本語）",le:"ポーズ名（英語）",lc:"カテゴリ",ll:"レベル",lp:"対象部位",ld:"説明・効果",li:"画像URL（省略可）",sb:"保存する",cb:"キャンセル",bb:"← ルーティン一覧へ",tl:"現在のポーズ",ts:"▷ タイマー開始",pa:"一時停止",re:"再開",pv:"← 前へ",nx:"次へ →",dn:"完了",co:["立位","前屈","後屈","座位","四つ這い","仰向け","その他"],lo:["初級","中級","上級"],cd:"このポーズを削除しますか？"},
+  en:{aT:"Yoga Pose Book",aS:"yoga pose dictionary & routine",tP:"Poses",tR:"Routines",sp:"Search poses...",ub:"My Pose",ab:"＋ Add Pose",me:"Description",mp:"Target areas",ep:"Edit",dp:"Delete",et:"Edit Pose",at:"Add Pose",ln:"Pose name (Japanese)",le:"Pose name (English)",lc:"Category",ll:"Level",lp:"Target areas",ld:"Description",li:"Image URL (optional)",sb:"Save",cb:"Cancel",bb:"← Back to routines",tl:"Current pose",ts:"▷ Start timer",pa:"Pause",re:"Resume",pv:"← Prev",nx:"Next →",dn:"Done",co:["Standing","Forward Bend","Backbend","Seated","All-Fours","Supine","Other"],lo:["Beginner","Intermediate","Advanced"],cd:"Delete this pose?"},
+};
+let lang='ja',acat=0,poses=[],eid=null,cr=null;
+let ti=null,ts=0,tr=false,tsi=0;
+const t=k=>T[lang][k]||k;
+function load(){try{const s=localStorage.getItem('yogaPoses');poses=s?[...DP,...JSON.parse(s)]:[...DP];}catch(e){poses=[...DP];}}
+function save(){try{localStorage.setItem('yogaPoses',JSON.stringify(poses.filter(p=>p.user)));}catch(e){}}
+function toggleLang(){lang=lang==='ja'?'en':'ja';document.getElementById('lang-btn').textContent=lang==='ja'?'EN':'日本語';document.body.className=lang==='en'?'en':'';acat=0;upd();renderPoses();if(document.getElementById('page-routine').classList.contains('active'))renderRoutines();}
+function upd(){
+  const m={aT:'app-title',aS:'app-sub',tP:'tab-poses',tR:'tab-routine',me:'msec-effect',mp:'msec-parts',tl:'timer-label',ts:'timer-start-btn',bb:'back-btn',ab:'add-pose-btn',pv:'btn-prev',nx:'btn-next',sb:'save-btn',cb:'cancel-btn'};
+  Object.entries(m).forEach(([k,id])=>{const e=document.getElementById(id);if(e)e.textContent=t(k);});
+  document.getElementById('search').placeholder=t('sp');
+  const lm={'lbl-name':'ln','lbl-en':'le','lbl-cat':'lc','lbl-level':'ll','lbl-parts':'lp','lbl-desc':'ld'};
+  Object.entries(lm).forEach(([id,k])=>{const e=document.getElementById(id);if(e)e.textContent=t(k);});
+  document.getElementById('f-cat').innerHTML=t('co').map(c=>`<option>${c}</option>`).join('');
+  document.getElementById('f-level').innerHTML=t('lo').map(l=>`<option>${l}</option>`).join('');
+}
+function initF(){document.getElementById('filters').innerHTML=CM[lang].map((c,i)=>`<button class="fb${i===acat?' active':''}" onclick="setF(${i})">${c}</button>`).join('');}
+function setF(i){acat=i;initF();renderPoses();}
+function mc(p,i){return i===0||p.cat===CM.ja[i];}
+function renderPoses(){
+  initF();
+  const q=document.getElementById('search').value.toLowerCase();
+  const f=poses.filter(p=>mc(p,acat)&&(!q||p.name.includes(q)||p.en.toLowerCase().includes(q)));
+  document.getElementById('grid').innerHTML=f.map(p=>`<div class="card" onclick="openM(${p.id})">${p.user?`<span class="user-badge">${t('ub')}</span>`:''}<div class="card-body"><p class="card-name">${p.name}</p><p class="card-en">${p.en}</p><div class="tags"><span class="tag tl">${p.level}</span><span class="tag tc">${p.cat}</span></div></div></div>`).join('');
+}
+function openM(id){
+  const p=poses.find(x=>x.id===id);
+  document.getElementById('modal-name').textContent=p.name;
+  document.getElementById('modal-en').textContent=p.en;
+  document.getElementById('modal-tags').innerHTML=`<span class="tag tl">${p.level}</span><span class="tag tc">${p.cat}</span>`;
+  document.getElementById('modal-desc').textContent=p.desc;
+  document.getElementById('modal-parts').textContent=p.parts;
+  document.getElementById('modal-actions').innerHTML=p.user?`<button class="modal-edit-btn" onclick="openE(${p.id})">${t('ep')}</button><button class="modal-del-btn" onclick="delP(${p.id})">${t('dp')}</button>`:'';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e){if(e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
+function openE(id){
+  eid=id;document.getElementById('edit-title').textContent=id?t('et'):t('at');
+  if(id){const p=poses.find(x=>x.id===id);['name','en','cat','level','parts','desc'].forEach(k=>{const e=document.getElementById('f-'+k);if(e)e.value=p[k]||'';});}
+  else{['f-name','f-en','f-parts','f-desc'].forEach(i=>document.getElementById(i).value='');}
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeEditModal(e){if(e.target===document.getElementById('edit-modal'))document.getElementById('edit-modal').classList.remove('open');}
+function savePose(){
+  const name=document.getElementById('f-name').value.trim(),en=document.getElementById('f-en').value.trim();
+  if(!name||!en){alert(lang==='ja'?'ポーズ名（日本語・英語）を入力してください':'Please enter pose names.');return;}
+  const d={name,en,cat:document.getElementById('f-cat').value,level:document.getElementById('f-level').value,parts:document.getElementById('f-parts').value.trim(),desc:document.getElementById('f-desc').value.trim(),user:true};
+  if(eid){const i=poses.findIndex(x=>x.id===eid);if(i>-1)poses[i]={...poses[i],...d};}
+  else{d.id=Date.now();poses.push(d);}
+  save();document.getElementById('edit-modal').classList.remove('open');renderPoses();
+}
+function delP(id){
+  if(!confirm(t('cd')))return;
+  poses=poses.filter(x=>x.id!==id);save();
+  document.getElementById('modal').classList.remove('open');renderPoses();
+}
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['poses','routine'][i]===tab));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  if(tab==='routine')renderRoutines();
+}
+function renderRoutines(){
+  document.getElementById('rcards').innerHTML=RT.map(r=>`<div class="rcard" onclick="openR(${r.id})"><div class="rcard-header"><span class="rcard-title">${r.title[lang]}</span><span class="rcard-meta">${r.dur[lang]} · ${r.lv[lang]}</span></div><p class="rcard-desc">${r.desc[lang]}</p><div class="rcard-poses">${r.steps.map(s=>{const p=poses.find(x=>x.id===s.pid);return p?`<span class="rpill">${lang==='en'?p.en:p.name}</span>`:''}).join('')}</div></div>`).join('');
+}
+function openR(id){
+  cr=RT.find(r=>r.id===id);
+  document.getElementById('rd-title').textContent=cr.title[lang];
+  document.getElementById('rd-meta').textContent=cr.dur[lang]+' · '+cr.lv[lang];
+  document.getElementById('step-list').innerHTML=cr.steps.map((s,i)=>{const p=poses.find(x=>x.id===s.pid);return`<div class="step"><div class="step-num">${i+1}</div><div class="step-info"><p class="step-name">${p?(lang==='en'?p.en:p.name):''}</p><p class="step-dur">${s.d[lang]}</p></div></div>`;}).join('');
+  clearT();
+  document.getElementById('timer-pose').textContent='—';
+  document.getElementById('timer-time').textContent='0:00';
+  document.getElementById('timer-progress').style.width='0%';
+  document.getElementById('timer-next').textContent='';
+  document.getElementById('start-btn').textContent='▷ 開始';
+  document.getElementById('routine-list').style.display='none';
+  document.getElementById('routine-detail').classList.add('open');
+}
+function closeRoutine(){
+  clearT();
+  document.getElementById('routine-detail').classList.remove('open');
+  document.getElementById('routine-list').style.display='block';
+}
+function closeRoutine(){clearT();document.getElementById('routine-detail').classList.remove('open');document.getElementById('routine-list').style.display='block';}
+
+// --- Audio ---
+let actx=null,bgmNode=null,bgmGain=null,bgmOn=true,voiceOn=true;
+let voiceVolume=0.92;
+function getActx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
+
+function toggleBgm(){
+  bgmOn=!bgmOn;
+  document.getElementById('bgm-btn').className='audio-toggle-btn'+(bgmOn?' on':'');
+  document.getElementById('bgm-btn').textContent='BGM '+(bgmOn?'オン':'オフ');
+  if(bgmGain){
+    const vol=parseInt(document.getElementById('bgm-vol').value)/100*0.6;
+    bgmGain.gain.setTargetAtTime(bgmOn?vol:0,getActx().currentTime,0.5);
+  }
+}
+function toggleVoice(){
+  voiceOn=!voiceOn;
+  document.getElementById('voice-btn').className='audio-toggle-btn'+(voiceOn?' on':'');
+  document.getElementById('voice-btn').textContent='声 '+(voiceOn?'オン':'オフ');
+}
+function setBgmVol(v){
+  if(bgmGain&&bgmOn){
+    bgmGain.gain.setTargetAtTime(parseInt(v)/100*0.6,getActx().currentTime,0.1);
+  }
+}
+function setVoiceVol(v){
+  voiceVolume=parseInt(v)/100;
+}
+
+function changeBgmType(){
+  if(tr||bgmGain){
+    stopBgm();
+    setTimeout(()=>startBgm(),100);
+  }
+}
+
+function startBgm(){
+  const ctx=getActx();
+  if(bgmNode){try{bgmNode.disconnect();}catch(e){}}
+  bgmGain=ctx.createGain();
+  bgmGain.gain.value=0;
+  bgmGain.connect(ctx.destination);
+  const type=document.getElementById('bgm-type').value;
+  if(type==='bowl') startBowl(ctx);
+  else if(type==='musicbox') startMusicBox(ctx);
+  else if(type==='wave') startWave(ctx);
+  else if(type==='mantra') startMantra(ctx);
+  const vol=parseInt(document.getElementById('bgm-vol').value)/100*0.5;
+  bgmGain.gain.setTargetAtTime(bgmOn?vol:0,ctx.currentTime,1.0);
+}
+
+// --- シンギングボール ---
+function startBowl(ctx){
+  function playSingingBowl(freq,time){
+    const partials=[1,2.756,5.404,8.933,13.34];
+    const gains=  [1,0.35, 0.18, 0.08, 0.04];
+    const decays= [8,5,    3.5,  2.5,  2.0];
+    partials.forEach((ratio,i)=>{
+      const osc=ctx.createOscillator();
+      const g=ctx.createGain();
+      osc.type='sine'; osc.frequency.value=freq*ratio;
+      g.gain.setValueAtTime(0,time);
+      g.gain.linearRampToValueAtTime(gains[i]*0.22,time+0.04);
+      g.gain.exponentialRampToValueAtTime(0.0001,time+decays[i]);
+      osc.connect(g);g.connect(bgmGain);
+      osc.start(time);osc.stop(time+decays[i]+0.1);
+    });
+    const click=ctx.createOscillator();
+    const cg=ctx.createGain();
+    click.type='sine';click.frequency.value=freq*0.5;
+    cg.gain.setValueAtTime(0.15,time);
+    cg.gain.exponentialRampToValueAtTime(0.001,time+0.12);
+    click.connect(cg);cg.connect(bgmGain);
+    click.start(time);click.stop(time+0.15);
+  }
+  const bowls=[216,288,324,432];
+  function scheduleLoop(startTime){
+    if(!bgmGain)return;
+    const seq=[[bowls[0],0],[bowls[2],9],[bowls[1],18],[bowls[3],26],[bowls[0],36],[bowls[2],44]];
+    const loopDur=52;
+    seq.forEach(([f,offset])=>playSingingBowl(f,startTime+offset));
+    setTimeout(()=>{if(bgmGain)scheduleLoop(ctx.currentTime+0.1);},(loopDur-1)*1000);
+  }
+  scheduleLoop(ctx.currentTime+0.2);
+  bgmNode={disconnect:()=>{}};
+}
+
+// --- オルゴール ---
+function startMusicBox(ctx){
+  function playNote(freq,time,dur){
+    const osc=ctx.createOscillator();
+    const osc2=ctx.createOscillator();
+    const g=ctx.createGain();
+    osc.type='sine';osc.frequency.value=freq;
+    osc2.type='sine';osc2.frequency.value=freq*4.03;
+    const g2=ctx.createGain();g2.gain.value=0.08;
+    g.gain.setValueAtTime(0,time);
+    g.gain.linearRampToValueAtTime(0.18,time+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001,time+dur);
+    osc.connect(g);osc2.connect(g2);g2.connect(g);g.connect(bgmGain);
+    osc.start(time);osc.stop(time+dur+0.05);
+    osc2.start(time);osc2.stop(time+dur+0.05);
+  }
+  const melody=[[523,1.2],[659,1.2],[784,1.6],[659,1.2],[523,1.6],[587,1.2],[784,1.2],[880,1.6],[784,1.2],[659,1.6],[523,1.2],[659,1.2],[523,1.2],[440,1.6],[392,2.0],[523,1.2],[659,1.2],[784,1.2],[880,1.2],[784,2.4]];
+  const bass=[[262,3.2],[294,3.2],[262,3.2],[196,3.2],[262,3.2],[294,3.2],[262,3.2],[196,3.2]];
+  let loopDur=0;melody.forEach(([f,d])=>loopDur+=d);
+  function scheduleLoop(startTime){
+    if(!bgmGain)return;
+    let t=startTime;
+    melody.forEach(([f,d])=>{playNote(f,t,d*0.85);t+=d;});
+    t=startTime;
+    bass.forEach(([f,d])=>{playNote(f,t,d*0.7);t+=d;});
+    setTimeout(()=>{if(bgmGain)scheduleLoop(ctx.currentTime+0.05);},(loopDur-0.5)*1000);
+  }
+  scheduleLoop(ctx.currentTime+0.3);
+  bgmNode={disconnect:()=>{}};
+}
+
+// --- 波の音 ---
+function startWave(ctx){
+  const bufSize=ctx.sampleRate*4;
+  const noiseBuf=ctx.createBuffer(1,bufSize,ctx.sampleRate);
+  const nd=noiseBuf.getChannelData(0);
+  for(let i=0;i<bufSize;i++)nd[i]=Math.random()*2-1;
+  const src=ctx.createBufferSource();
+  src.buffer=noiseBuf;src.loop=true;
+  const lpf=ctx.createBiquadFilter();
+  lpf.type='lowpass';lpf.frequency.value=400;lpf.Q.value=1.2;
+  const lfoAmp=ctx.createOscillator();
+  const lfoGain=ctx.createGain();
+  lfoAmp.type='sine';lfoAmp.frequency.value=0.12;
+  lfoGain.gain.value=0.35;
+  lfoAmp.connect(lfoGain);
+  const waveGain=ctx.createGain();
+  waveGain.gain.value=0.45;
+  lfoGain.connect(waveGain.gain);
+  src.connect(lpf);lpf.connect(waveGain);waveGain.connect(bgmGain);
+  const lpf2=ctx.createBiquadFilter();
+  lpf2.type='lowpass';lpf2.frequency.value=80;lpf2.Q.value=0.8;
+  const deepGain=ctx.createGain();deepGain.gain.value=0.3;
+  const src2=ctx.createBufferSource();
+  src2.buffer=noiseBuf;src2.loop=true;src2.loopStart=0.7;
+  src2.connect(lpf2);lpf2.connect(deepGain);deepGain.connect(bgmGain);
+  lfoAmp.start();src.start();src2.start();
+  bgmNode=src;
+}
+
+// --- マントラ（オーム） ---
+function startMantra(ctx){
+  // 「オーム」＝ A→U→M の3音を繋ぎ、倍音豊かなドローンで表現
+  function playOm(startTime){
+    if(!bgmGain)return;
+    const fundamental=108; // 108Hz（ヨガの聖数・低音のオーム）
+    const dur=12; // 1回のオームの長さ（秒）
+    // A音（口を開く）
+    [1,2,3,4,5,6].forEach((n,i)=>{
+      const osc=ctx.createOscillator();
+      const g=ctx.createGain();
+      osc.type='sine';osc.frequency.value=fundamental*n;
+      g.gain.setValueAtTime(0,startTime);
+      g.gain.linearRampToValueAtTime([0.22,0.14,0.09,0.06,0.04,0.02][i],startTime+1.5);
+      g.gain.setValueAtTime([0.22,0.14,0.09,0.06,0.04,0.02][i],startTime+4);
+      // U音（口を閉じていく）→ 高次倍音が落ちる
+      g.gain.linearRampToValueAtTime([0.18,0.08,0.03,0.01,0.005,0.001][i],startTime+7);
+      // M音（口を完全に閉じる）→ 基音と2倍音だけ残る
+      g.gain.linearRampToValueAtTime(i<2?[0.12,0.06][i]:0.0001,startTime+9);
+      // 静寂へ
+      g.gain.exponentialRampToValueAtTime(0.0001,startTime+dur);
+      // LFOで微妙な揺れ（人の声っぽく）
+      const lfo=ctx.createOscillator();
+      const lfoG=ctx.createGain();
+      lfo.type='sine';lfo.frequency.value=5.5+i*0.3;
+      lfoG.gain.value=fundamental*n*0.004;
+      lfo.connect(lfoG);lfoG.connect(osc.frequency);
+      lfo.start(startTime);lfo.stop(startTime+dur);
+      osc.connect(g);g.connect(bgmGain);
+      osc.start(startTime);osc.stop(startTime+dur+0.1);
+    });
+    // 次のオームまでの間隔（3秒の静寂）
+    const interval=dur+3;
+    setTimeout(()=>{if(bgmGain)playOm(ctx.currentTime+0.1);},( interval-0.5)*1000);
+  }
+  playOm(ctx.currentTime+0.5);
+  bgmNode={disconnect:()=>{}};
+}
+
+function stopBgm(){
+  if(actx){try{actx.close();}catch(e){} actx=null;bgmNode=null;bgmGain=null;}
+}
+
+function playTick(){
+  const ctx=getActx();
+  const osc=ctx.createOscillator();
+  const g=ctx.createGain();
+  osc.type='sine';osc.frequency.value=880;
+  g.gain.setValueAtTime(0.3,ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.08);
+  osc.connect(g);g.connect(ctx.destination);
+  osc.start();osc.stop(ctx.currentTime+0.1);
+}
+
+function playDone(){
+  const ctx=getActx();
+  [523,659,784].forEach((f,i)=>{
+    const osc=ctx.createOscillator();
+    const g=ctx.createGain();
+    osc.type='sine';osc.frequency.value=f;
+    const t=ctx.currentTime+i*0.18;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(0.25,t+0.05);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.4);
+    osc.connect(g);g.connect(ctx.destination);
+    osc.start(t);osc.stop(t+0.5);
+  });
+}
+
+function toReadable(text){
+  return text
+    .replace(/Ⅲ|III/g,'さん')
+    .replace(/Ⅱ|II/g,'に')
+    .replace(/Ⅰ|I(?=[^a-zA-Z]|$)/g,'いち');
+}
+function speak(text){
+  text=toReadable(text);
+  if(!voiceOn)return;
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=lang==='en'?'en-US':'ja-JP';
+  u.rate=0.78;
+  u.pitch=0.85;
+  u.volume=voiceVolume;
+  const voices=window.speechSynthesis.getVoices();
+  // 日本語：女性・やさしい声を優先
+  const preferred=voices.find(v=>v.lang==='ja-JP'&&/kyoko|haruka|otoya|google|female/i.test(v.name))
+    ||voices.find(v=>v.lang==='ja-JP'&&v.localService)
+    ||voices.find(v=>v.lang==='ja-JP');
+  if(lang==='en'){
+    const enVoice=voices.find(v=>v.lang==='en-US'&&/samantha|karen|moira|victoria|google/i.test(v.name))
+      ||voices.find(v=>v.lang==='en-US');
+    if(enVoice)u.voice=enVoice;
+  } else {
+    if(preferred)u.voice=preferred;
+  }
+  window.speechSynthesis.speak(u);
+}
+
+// --- ポーズの秒数をパース ---
+function parseDurSec(durStr){
+  // 例: "1分30秒", "2分", "30秒", "1 min", "1m 30s", "2 min each"
+  let total=0;
+  const mJa=durStr.match(/(\d+)分/);
+  const sJa=durStr.match(/(\d+)秒/);
+  const mEn=durStr.match(/(\d+)\s*m/i);
+  const sEn=durStr.match(/(\d+)\s*s/i);
+  const minEn=durStr.match(/(\d+)\s*min/i);
+  if(mJa)total+=parseInt(mJa[1])*60;
+  if(sJa)total+=parseInt(sJa[1]);
+  if(!mJa&&!sJa){
+    if(mEn&&!minEn)total+=parseInt(mEn[1])*60;
+    if(minEn)total+=parseInt(minEn[1])*60;
+    if(sEn)total+=parseInt(sEn[1]);
+  }
+  return total||60;
+}
+
+// --- タイマー本体 ---
+let stepDurSec=60,announcedCountdown=false,announcedNext=false,announcedPose=false;
+
+function toggleStart(){
+  if(!tr&&ts===0){
+    startTimer();
+  } else if(tr){
+    tr=false;
+    document.getElementById('start-btn').textContent='▷ 再開';
+    if(bgmGain){const vol=parseInt(document.getElementById('bgm-vol').value)/100*0.5;bgmGain.gain.setTargetAtTime(0.04,getActx().currentTime,0.3);}
+  } else {
+    tr=true;
+    document.getElementById('start-btn').textContent='⏸ 一時停止';
+    if(bgmGain){const vol=parseInt(document.getElementById('bgm-vol').value)/100*0.5;bgmGain.gain.setTargetAtTime(bgmOn?vol:0,getActx().currentTime,0.3);}
+  }
+}
+
+function startTimer(){
+  const btn=document.getElementById('start-btn');
+  btn.textContent='⏸ 一時停止';
+  document.getElementById('bgm-btn').className='audio-toggle-btn'+(bgmOn?' on':'');
+  document.getElementById('bgm-btn').textContent='BGM '+(bgmOn?'オン':'オフ');
+  document.getElementById('voice-btn').className='audio-toggle-btn'+(voiceOn?' on':'');
+  document.getElementById('voice-btn').textContent='声 '+(voiceOn?'オン':'オフ');
+  tsi=0;ts=0;tr=true;
+  stepDurSec=parseDurSec(cr.steps[0].d[lang]);
+  announcedPose=true;announcedCountdown=false;announcedNext=false;
+  startBgm();
+  updT();
+  clearInterval(ti);
+  setTimeout(()=>{
+    const firstP=poses.find(x=>x.id===cr.steps[0].pid);
+    const firstName=firstP?(lang==='en'?firstP.en:firstP.name):'';
+    speak(firstName);
+  },600);
+  ti=setInterval(()=>{
+    if(!tr)return;
+    ts++;
+    const remaining=stepDurSec-ts;
+    if(remaining<=10&&remaining>0&&!announcedCountdown){
+      announcedCountdown=true;
+      const nextStep=cr.steps[tsi+1];
+      const nextP=nextStep?poses.find(x=>x.id===nextStep.pid):null;
+      if(nextP)speak(lang==='en'?'Next: '+(nextP.en):'次は、'+nextP.name);
+    }
+    if(remaining<=10&&remaining>0){playTick();}
+    if(ts>=stepDurSec){
+      if(tsi<cr.steps.length-1){
+        tsi++;ts=0;
+        stepDurSec=parseDurSec(cr.steps[tsi].d[lang]);
+        announcedPose=false;announcedCountdown=false;announcedNext=false;
+      } else {
+        tr=false;clearInterval(ti);playDone();
+        speak(lang==='en'?'Routine complete. Well done.':'ルーティン完了です。お疲れ様でした。');
+        document.getElementById('timer-pose').textContent=lang==='en'?'Complete!':'完了！';
+        document.getElementById('timer-next').textContent='';
+        document.getElementById('timer-progress').style.width='100%';
+        document.getElementById('start-btn').textContent='▷ もう一度';
+        ts=0;
+        return;
+      }
+    }
+    updT();
+  },1000);
+}
+
+function updT(){
+  const step=cr.steps[tsi];
+  const p=step?poses.find(x=>x.id===step.pid):null;
+  const name=p?(lang==='en'?p.en:p.name):'';
+  const remaining=stepDurSec-ts;
+  const m=Math.floor(remaining/60),s=remaining%60;
+  document.getElementById('timer-time').textContent=m+':'+(s<10?'0':'')+s;
+  document.getElementById('timer-pose').textContent=name;
+  // プログレスバー
+  const pct=Math.min(100,Math.round((ts/stepDurSec)*100));
+  document.getElementById('timer-progress').style.width=pct+'%';
+  // 次のポーズ表示
+  const nextStep=cr.steps[tsi+1];
+  const nextP=nextStep?poses.find(x=>x.id===nextStep.pid):null;
+  document.getElementById('timer-next').textContent=nextP?(lang==='en'?'Next: '+(nextP.en):'次　'+nextP.name):'';
+  // ポーズ開始アナウンス（のポーズ不要・ポーズ名そのまま）
+  if(!announcedPose&&ts===0){
+    announcedPose=true;
+    setTimeout(()=>speak(name),300);
+  }
+}
+
+function clearT(){
+  clearInterval(ti);tr=false;ts=0;tsi=0;
+  stopBgm();
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+}
+function nextPose(){
+  if(!cr)return;
+  if(tsi<cr.steps.length-1){tsi++;ts=0;stepDurSec=parseDurSec(cr.steps[tsi].d[lang]);announcedPose=false;announcedCountdown=false;announcedNext=false;updT();}
+}
+function prevPose(){
+  if(!cr)return;
+  if(tsi>0){tsi--;ts=0;stepDurSec=parseDurSec(cr.steps[tsi].d[lang]);announcedPose=false;announcedCountdown=false;announcedNext=false;updT();}
+}
+load();upd();renderPoses();
+</script>
+</body>
+</html>
